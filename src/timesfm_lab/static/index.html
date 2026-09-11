@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1017"><title>TimesFM · Multi-asset research</title>
+  <link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="TimesFM research home"><span class="brand-mark">≋</span><span>timesfm<span class="brand-caption">RESEARCH WORKSPACE</span></span></a>
+    <div class="nav-caption">WORKSPACE</div>
+    <nav aria-label="Workspace"><button class="nav-button active" data-view="markets">◫ <span>Market explorer</span></button><button class="nav-button" data-view="experiments">⌁ <span>Experiments</span></button><button class="nav-button" data-view="coverage">▦ <span>Data coverage</span></button></nav>
+    <div class="sidebar-note"><span class="status-dot"></span> LOCAL RESEARCH<br><p>Stocks, indices, commodities and global markets. One observed time axis.</p><span class="small">No model promoted to trading</span></div>
+  </aside>
+  <main>
+    <header><div class="breadcrumb">Workspace <span>/</span> <strong id="view-name">Market explorer</strong></div><div class="header-controls"><label class="small" for="interval">Bar interval</label><select id="interval"><option value="5m" selected>5 minutes</option><option value="1d">Daily</option></select><span class="badge">RESEARCH ONLY</span></div></header>
+    <div class="page-title"><div><p class="eyebrow">MULTI-ASSET INTELLIGENCE</p><h1 id="page-title">A wider view of the market.</h1><p class="subhead" id="page-subtitle">Explore the relationships. Test the forecasts.</p></div><button class="button secondary" id="refresh" aria-label="Refresh data view"><span aria-hidden="true">↻</span><span class="refresh-label">Refresh data view</span></button></div>
+    <div id="notice" class="notice" role="status">Loading research workspace…</div>
+    <section id="market-view">
+      <div id="market-cards" class="market-cards"></div>
+      <div class="workspace-grid">
+        <section class="panel watchlist"><div class="panel-heading"><h2>Asset universe</h2><span id="asset-count" class="muted"></span></div>
+          <label class="search"><span>⌕</span><input id="search" placeholder="Search assets…" aria-label="Search assets"></label>
+          <div class="filters" id="filters"><button class="selected" data-filter="all">All</button><button data-filter="equity">Stocks</button><button data-filter="commodity">Commodities</button><button data-filter="indices">Indices & FX</button></div>
+          <div class="list-head"><span>INSTRUMENT</span><span>LAST / CHANGE</span></div><div id="asset-list" class="asset-list"></div>
+        </section>
+        <section class="panel chart-panel"><div class="chart-heading"><div><p class="eyebrow" id="chart-meta">—</p><h2 id="chart-name">Choose an asset</h2><div class="chart-price"><span id="chart-price">—</span><span id="chart-change" class="change"></span></div></div><div class="chart-controls"><select id="range" aria-label="Chart range"><option value="75">75 bars</option><option value="180" selected>180 bars</option><option value="750">750 bars</option></select><span class="small" id="chart-interval">5m</span></div></div>
+          <div class="chart-legend"><span><i class="legend-key candle-key"></i>Observed OHLC</span><span><i class="legend-key forecast-key"></i>Forecast</span><span><i class="legend-key band-key"></i>10–90% interval</span></div>
+          <div id="chart" class="chart" aria-label="Candlestick and forecast chart"></div><div id="chart-tooltip" class="chart-tooltip" aria-live="polite">Hover over a candle to inspect its session.</div>
+          <div class="chart-footer"><span id="chart-source">No source loaded</span><span id="chart-forecast-note">No forecast run</span></div>
+        </section>
+      </div>
+      <div class="bottom-grid"><section class="panel"><div class="panel-heading"><h2>Stock forecast ranking</h2><span id="ranking-meta" class="muted">No forecast yet</span></div><div id="rankings" class="table-wrap"></div></section><section class="panel research-note"><p class="eyebrow">THE RESEARCH QUESTION</p><h2>Do commodities add signal?</h2><p>Compare stocks with global and index context against the same model with Gold, Silver, Crude, Natural Gas and Copper added.</p><button class="text-button" id="open-experiments">Explore experiments →</button><div class="note-foot">Measured on common historical origins. Quantile bands are not direction confidence.</div></section></div>
+    </section>
+    <section id="experiment-view" hidden>
+      <div class="experiment-grid"><section class="panel experiment-form"><div class="panel-heading"><h2>Configure a run</h2><span class="badge subtle">ZERO SHOT</span></div>
+        <form id="run-form"><label>Run type<select id="run-kind"><option value="forecast">Current forecast</option><option value="backtest">Walk-forward evaluation</option><option value="compare">Compare all experiments</option></select></label><label>Model<select id="run-model"><option value="timesfm">TimesFM 3.0</option><option value="naive">Last-price baseline</option></select></label><label>Experiment<select id="run-experiment"><option value="stock_covariates">Stocks + cross-asset covariates</option><option value="joint">Joint forecast · all selected assets</option><option value="stock_only">Stocks only · control</option><option value="macro_control">Stocks + indices / global · control</option></select></label><label>Asset profile<select id="run-profile"><option value="core">Core · 17 assets</option><option value="full">Full registered universe · gaps may block</option></select></label><div class="form-row"><label>Context bars<input id="run-context" type="number" value="64" min="32" max="1024"></label><label>Horizon bars<input id="run-horizon" type="number" value="5" min="1" max="64"></label><label>Evaluation folds<input id="run-folds" type="number" value="6" min="1" max="100"></label></div><label class="checkbox"><input type="checkbox" id="latest-complete"><span>Allow a lagged complete context within the latest session. The forecast origin and missing-bar lag remain visible.</span></label><label class="checkbox"><input type="checkbox" id="retrospective"><span>Allow retrospective research data with unverified original publication times.</span></label><button type="submit" class="button primary" id="run-button">Run experiment ↗</button><p class="small muted">Historical evaluations reserve the latest 20% of bars. Missing context blocks a fold.</p></form>
+        <div id="job-status" role="status" class="job-status"></div>
+      </section><section class="panel"><div class="panel-heading"><h2>Experiment history</h2><button class="text-button" id="refresh-runs">Refresh ↻</button></div><div id="run-list" class="run-list"></div></section></div>
+      <section class="panel results-panel"><div class="panel-heading"><h2 id="result-title">Measured results</h2><a id="download-run" class="text-button" hidden>Download JSON ↗</a></div><div id="run-result" class="run-result"><p class="empty">Select a completed run to inspect its results and provenance.</p></div></section>
+    </section>
+    <section id="coverage-view" hidden><section class="panel"><div class="panel-heading"><h2>Source coverage & provenance</h2><span id="coverage-summary" class="muted"></span></div><p class="coverage-note">Counts describe observed history. Original publication timing, continuous contract rolls and complete historical universe membership require separate evidence.</p><div class="table-wrap" id="coverage-table"></div></section></section>
+    <footer>TimesFM research lab <span>Prices stay in their native currencies · Sources and missingness remain visible</span></footer>
+  </main>
+</body>
+</html>
